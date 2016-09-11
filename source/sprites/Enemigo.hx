@@ -7,8 +7,8 @@ import flixel.group.FlxGroup;//para grupo de enemigos
 
 class Enemigo extends FlxSprite
 {
-	private var dir:Int = 1;
-	private var velocidadX:Float = 0.5;
+	public static var velocidadX:Float = 0.5;
+	public static var orientacion:Bool;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
@@ -22,15 +22,12 @@ class Enemigo extends FlxSprite
 			
 		   if (x >= FlxG.width - width)
 		   {
-		       dir = -1;
-			   y += 10;
+			   orientacion = true;
 		   }
 		   if (x <= 0)
 		   {
-			   dir = 1;
-			   y += 10;
+			   orientacion = false;
 		   }
-			   
-		x += dir * velocidadX;
+			  
 	}
 }

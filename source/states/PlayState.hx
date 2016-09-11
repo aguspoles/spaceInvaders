@@ -14,6 +14,8 @@ class PlayState extends FlxState
 {
 	private var player:Personaje;
 	private var enemyGroup:FlxGroup = new FlxGroup();
+	private static var enemyArray = new Array<Enemigo>();
+	private static var totalEnemigos:Int = 17;
 	
 	override public function create():Void
 	{
@@ -23,9 +25,9 @@ class PlayState extends FlxState
 		var enemigo:Enemigo;
 		var f:Int = 20;
 		var c:Int = 20;
-		for (i in 0...17)
+		for (i in 0...totalEnemigos)
 		{
-			if (f >= FlxG.width-player.width-32)
+			if (f >= (FlxG.width - player.width - 32))
 			{
 			   f = 20;
 			   c += 20;
@@ -36,10 +38,10 @@ class PlayState extends FlxState
 				   enemigo = new Enemigo(f, c); 
 				   f += 20;
 			   }
-			enemyGroup.add(enemigo);
+			//enemyGroup.add(enemigo);
+			enemyArray.push(enemigo);
+			add(enemyArray[i]);
 		}
-
-		add(enemyGroup);
 		
 		super.create();
 		
@@ -49,13 +51,24 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		
-		//si colisionan bala y enemigo se destruyen
-		for(i in 0...17){
-			if (FlxG.overlap(enemyGroup.members[i], Personaje.bala))
+		for (i in 0...enemyArray.length){
+			
+			//si colisionan bala y enemigo se destruyen
+			if (FlxG.overlap(enemyArray[i], Personaje.bala))
 			{
 				Personaje.bala.destroy();
-				enemyGroup.members[i].destroy();
+				enemyArray[i].destroy();
 				Personaje.balasEnPantalla = 0;
+			}
+			
+			//cambio direccion cunado tocan bordes de pantalla
+			if (Enemigo.orientacion)
+			{
+			   enemyArray[i].x -= Enemigo.velocidadX;
+			}
+			else
+			{
+			   enemyArray[i].x += Enemigo.velocidadX;
 			}
 		}
 	}
