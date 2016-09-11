@@ -7,6 +7,7 @@ import flixel.FlxG;
 class Personaje extends FlxSprite
 {
 	public static var balasEnPantalla:Int = 0;
+	public static var bala:Bullet;
 	private var key_right:Bool;
 	private var key_left:Bool;
 	private var move:Int;
@@ -20,6 +21,8 @@ class Personaje extends FlxSprite
 	
 	override public function update(elapsed:Float):Void
 	{	
+		super.update(elapsed);
+		
 		//movimiento
 		key_right = FlxG.keys.pressed.RIGHT;
 		key_left = FlxG.keys.pressed.LEFT;
@@ -38,23 +41,12 @@ class Personaje extends FlxSprite
 		{
 			if (balasEnPantalla == 0)
 			{
-			   var b:Bullet = new Bullet(x + width / 2, y - height);
-			   FlxG.state.add(b);
+			   bala = new Bullet(x + width / 2, y - height);
+			   FlxG.state.add(bala);
 			   balasEnPantalla++;
 			}
 		}
 		
-		
-		//si colisionan se destruyen
-		/*for(i in 0...4){
-			if (FlxG.overlap(charGroup.members[i], b))
-			{
-				b.destroy();
-				charGroup.members[i].destroy();
-			}
-		}*/
-		
-		super.update(elapsed);
 		
 		}
 	}
