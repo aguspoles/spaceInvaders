@@ -54,6 +54,13 @@
 				Enemigo.bala.destroy();
 			}
 			
+			//colision bala de jefe
+			if (FlxG.overlap(Jefe.bala, this))
+			{
+				this.destroy();
+				Jefe.bala.destroy();
+			}
+			
 			
 			}
 		}
