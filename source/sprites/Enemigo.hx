@@ -8,7 +8,7 @@ import flixel.group.FlxGroup;//para grupo de enemigos
 
 class Enemigo extends FlxSprite
 {
-	public static var velocidadX:Float = 0.5;
+	public static var velocidadX:Float = 0.2;
 	public static var orientacion:Bool;
 	public static var bala:Bullet;
 	

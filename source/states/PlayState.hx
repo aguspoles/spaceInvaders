@@ -14,41 +14,42 @@
 						class Playstate extends FlxState
 						{
 							private var player:Personaje;
-							private static var enemyArray = new Array<Enemigo>();
+							private var enemyArray = new Array<Enemigo>();
+							private var enemigo:Enemigo;
 							private var jefe:Jefe;
-							private static var totalenemigos:Int = 20;
+							private var totalenemigos:Int = 21;
 							private var tiempo_1:Int = 0;
 							private var tiempo_2:Int = 0;
 							private var tiempo_3:Int = 0;
+							private var tiempo_4:Int = 0;
+							private var tiempo_5:Int = 0;
 							private var balaRandom:FlxRandom = new FlxRandom();
 							
 							override public function create():Void
 							{
 								player = new Personaje(FlxG.width / 2, FlxG.height - 16);
 								add(player);
-									
-								var enemigo:Enemigo;
+								jefe = new Jefe();
+				
 								var f:Int = 10;
 								var c:Int = 10;
 								for (i in 0...totalenemigos)
 								{
-									if (f >= (FlxG.width - player.width - 32))
+									enemigo = new Enemigo(f, c);
+									if (f >= (FlxG.width - player.width -32))
 									{
 									   f = 10;
 									   c += 20;
-									   enemigo = new Enemigo(f, c);
 									}
 									   else
 									   {
-										   enemigo = new Enemigo(f, c); 
 										   f += 20;
 									   }
 									enemyArray.push(enemigo);
 									add(enemyArray[i]);
+							
 								}
-								
 						
-								
 								super.create();
 								
 							}
@@ -56,7 +57,8 @@
 							override public function update(elapsed:Float):Void
 							{
 								super.update(elapsed);
-								
+					
+					//CODIGO ENEMIGOS
 								for (i in 0...enemyArray.length){
 
 									
@@ -103,26 +105,59 @@
 												}
 												tiempo_2 = 0;
 											}
+				//FIN CODIGO ENEMIGOS
 											
-											
+				//CODIGO DE JEFE							
 											//cada 10 segundos aparece jefe
 											tiempo_3++;
-											if (tiempo_3 == 600) 
+											if (tiempo_3 == 60) 
 											{
-												jefe = new Jefe();
+												jefe = new Jefe();												
 												add(jefe);
-												if (Jefe.orientacion)
+												jefe.active = true;
+											}
+											
+											if (!jefe.active)//si se detruye reseteamos tiempo
+											{
+												tiempo_3 = 0;//¡¡¡igualmente no logro que respawnee!!!!
+											}
+										
+											
+											if (jefe.active)
+											{
+												tiempo_5++;      //dispara 1 bala por segundo
+												if (tiempo_5 == 60)
+												{
+													jefe.dispara();
+													tiempo_5 = 0;
+												}
+											}
+												
+											if (Jefe.orientacion)
 									            {
-									                 jefe.x -= Jefe.velocidadX;
+									                jefe.x -= Jefe.velocidadX;
 									            }
 									             else
 									             {
 									                jefe.x += Jefe.velocidadX;
 									             }
-												 //si se murio reseteamos tiempo
-												if(Jefe.impacto)
-												   tiempo_3 = 0;
+												 
+									
+										tiempo_4++;
+										if (tiempo_4 == 150)		//baja cada 2.5 segundos
+											{
+												jefe.y += 10;
+												tiempo_4 = 0;        //se resetea el tiempo
 											}
+											
+									//colision jefe/player
+									if (FlxG.overlap(player, jefe))
+									{
+										player.destroy();
+										jefe.destroy();
+									}
+									
+					//FIN CODIGO JEFE
 											
 						
 											

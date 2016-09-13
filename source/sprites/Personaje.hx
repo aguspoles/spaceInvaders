@@ -47,7 +47,7 @@
 				}
 			}
 			
-			//colision con bala enemiga
+			//colision con bala de enemigo
 			if (FlxG.overlap(Enemigo.bala, this))
 			{
 				this.destroy();

@@ -12,13 +12,19 @@ class Jefe extends FlxSprite
 	public static var velocidadX:Float = 1;
 	public static var orientacion:Bool;
 	public static var bala:Bullet;
-	public static var impacto:Bool = false;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		makeGraphic(32, 32, FlxColor.BROWN);
+		makeGraphic(16, 16, FlxColor.BROWN);
 		
+	}
+	
+	public function dispara():Void
+	{
+		bala = new Bullet(x + width / 2, y + height);
+		bala.velocity.y *= -1;
+		FlxG.state.add(bala);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -39,7 +45,7 @@ class Jefe extends FlxSprite
 		   {
 			   Personaje.bala.destroy();
 			   this.destroy();
-			   impacto = true;
+			   this.active = false;
 	    	   Personaje.balasEnPantalla = 0;
 		   }
 			  
