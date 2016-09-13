@@ -47,6 +47,13 @@
 				}
 			}
 			
+			//colision con bala enemiga
+			if (FlxG.overlap(Enemigo.bala, this))
+			{
+				this.destroy();
+				Enemigo.bala.destroy();
+			}
+			
 			
 			}
 		}

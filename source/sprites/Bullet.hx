@@ -18,11 +18,14 @@ class Bullet extends FlxSprite
 	{	
 		super.update(elapsed);
 		
-		if (y <= 0)
+		if (y <= 0)//para bala del player
 		{  
 		    destroy();
 		    Personaje.balasEnPantalla = 0;
 	    }
+		
+		if (y >= FlxG.height)//para bala enemiga
+		    destroy();
 		
 	}
 }
