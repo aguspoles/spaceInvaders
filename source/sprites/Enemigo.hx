@@ -11,6 +11,7 @@ class Enemigo extends FlxSprite
 	public static var velocidadX:Float = 0.2;
 	public static var orientacion:Bool;
 	public static var bala:Bullet;
+	public static var cuntosQuedan:Int = 1;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
@@ -47,6 +48,7 @@ class Enemigo extends FlxSprite
 			   this.destroy();
 			   this.active = false;//para q no siga disparando
 	    	   Personaje.balasEnPantalla = 0;
+			   cuntosQuedan++;
 		   }
 			  
 	}

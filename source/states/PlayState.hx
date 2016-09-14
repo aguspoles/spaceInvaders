@@ -119,16 +119,17 @@
 											if (tiempo_2 == 60) //cada un intervalo de tiempo
 											{
 												var r:Int = balaRandom.int(0, enemyArray.length - 1);
-												if (enemyArray[r].active == true)
+												while (!enemyArray[r].active && Enemigo.cuntosQuedan <= totalenemigos)  //este ciclo me permite mantener los intervalos de tiempo, cunado vayan despareciendo los enemigos
 												{
-											        enemyArray[r].dispara();
+													r = balaRandom.int(0, enemyArray.length - 1);
+													tiempo_2 = 0;
 												}
-												tiempo_2 = 0;
+											    enemyArray[r].dispara();
 											}
 				//FIN CODIGO ENEMIGOS
 											
 				//CODIGO DE JEFE							
-											//cada 10 segundos aparece jefe
+											//cada 1 intervalo de tiempo aparece jefe
 											tiempo_3++;
 											if (tiempo_3 == 60) 
 											{
