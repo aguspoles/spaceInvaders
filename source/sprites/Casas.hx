@@ -4,10 +4,6 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
 
-/**
- * ...
- * @author ...
- */
 class Casas extends FlxSprite
 {
 	private var dmg:Int = 0;
@@ -18,12 +14,12 @@ class Casas extends FlxSprite
 	}
 	override public function update(elapsed:Float):Void
 		{
-			if (FlxG.overlap(Enemigo.bala, this))
+			if (FlxG.overlap(Enemigo.bala, this) && Enemigo.bala != null)
 			{
 				Enemigo.bala.destroy();
 				dmg ++;
 			}
-			if (FlxG.overlap(Personaje.bala, this))
+			if (FlxG.overlap(Personaje.bala, this) && Personaje.bala != null)
 			{
 				dmg++;
 				Personaje.balasEnPantalla = 0;

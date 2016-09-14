@@ -79,6 +79,7 @@
 										Personaje.bala.destroy();
 										Enemigo.bala.destroy();
 										Personaje.balasEnPantalla = 0;
+									}
 					
 					//CODIGO ENEMIGOS
 								for (i in 0...enemyArray.length){
@@ -124,9 +125,10 @@
 												while (!enemyArray[r].active && Enemigo.cuntosQuedan <= totalenemigos)  //este ciclo me permite mantener los intervalos de tiempo, cunado vayan despareciendo los enemigos
 												{
 													r = balaRandom.int(0, enemyArray.length - 1);
-													tiempo_2 = 0;
 												}
-											    enemyArray[r].dispara();
+												if(enemyArray[r].active)//para que no siga disparando el ultimo vivo una vez que muere
+											        enemyArray[r].dispara();
+												tiempo_2 = 0;
 											}
 				//FIN CODIGO ENEMIGOS
 											
@@ -154,13 +156,10 @@
 									                jefe.x += Jefe.velocidadX;
 									             }
 					//FIN CODIGO JEFE
-											if (!player.exists)
-											{
-												
-											}
 						
 											
-							}
+									
 
 							
+						}
 						}
