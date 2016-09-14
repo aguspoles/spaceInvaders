@@ -99,10 +99,11 @@
 											if (tiempo_2 == 60) //cada un intervalo de tiempo
 											{
 												var r:Int = balaRandom.int(0, enemyArray.length - 1);
-												if (enemyArray[r].active == true)
+												while (!enemyArray[r].active)  //este ciclo me permite mantener los intervalos de tiempo, cunado vayan despareciendo los enemigos
 												{
-											        enemyArray[r].dispara();
+													r = balaRandom.int(0, enemyArray.length - 1);
 												}
+											    enemyArray[r].dispara();
 												tiempo_2 = 0;
 											}
 				//FIN CODIGO ENEMIGOS
