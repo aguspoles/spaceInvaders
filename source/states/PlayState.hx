@@ -1,4 +1,4 @@
-                        package states;
+﻿                        package states;
 
 					    import flixel.FlxG;
 						import flixel.FlxSprite;
@@ -28,6 +28,7 @@
 							private var tiempo_4:Int = 0;
 							private var tiempo_5:Int = 0;
 							private var balaRandom:FlxRandom = new FlxRandom();
+							private var explosion:FlxSprite;
 							
 							override public function create():Void
 							{
@@ -35,11 +36,11 @@
 								add(player);
 								player.loadGraphic(AssetPaths.personaje__png, false, 16, 16);
 								jefe = new Jefe();
-								casa1 = new Casas(FlxG.width -(FlxG.width - 16), FlxG.height - 50);
+								casa1 = new Casas(FlxG.width -(FlxG.width - 16), FlxG.height - 35);
 								add (casa1);
-								casa2 = new Casas(FlxG.width -(FlxG.width - 64), FlxG.height - 50);
+								casa2 = new Casas(FlxG.width -(FlxG.width - 64), FlxG.height - 35);
 								add (casa2);
-								casa3 = new Casas(FlxG.width -(FlxG.width - 112), FlxG.height - 50);
+								casa3 = new Casas(FlxG.width -(FlxG.width - 112), FlxG.height - 35);
 								add (casa3);
 				
 								var f:Int = 10;
@@ -70,13 +71,14 @@
 								super.update(elapsed);
 								
 								//colision con bala de enemigo
-								if (FlxG.overlap(Enemigo.bala, this))
+								if (FlxG.overlap(Enemigo.bala, Personaje.bala))
 									{
-										this.destroy();
-										explosion = new FlxSprite;
-				
+										explosion= new FlxSprite(Enemigo.bala.x, Enemigo.bala.y);
+										explosion.loadGraphic(AssetPaths.explosionentredisparos__png, false);
+										explosion.setGraphicSize (16, 16);
+										Personaje.bala.destroy();
 										Enemigo.bala.destroy();
-									}
+										Personaje.balasEnPantalla = 0;
 					
 					//CODIGO ENEMIGOS
 								for (i in 0...enemyArray.length){
@@ -134,12 +136,10 @@
 											if (tiempo_3 == 60) 
 											{
 												jefe = new Jefe();
-												jefe.loadGraphic(AssetPaths.zubat__png, false);
-												jefe.setGraphicSize (16, 16);
 												add(jefe);
 											}
 											
-											if (!jefe.exists && tiempo_3 >= 60)//si se detruye reseteamos tiempo
+											if (!jefe.active && tiempo_3 >= 60)//si se detruye reseteamos tiempo
 											{
 												
 												tiempo_3 = 0;//¡¡¡igualmente no logro que respawnee!!!!

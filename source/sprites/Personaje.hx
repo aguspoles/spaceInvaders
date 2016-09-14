@@ -44,11 +44,17 @@
 				{
 				   bala = new Bullet(x + width / 2, y - height);
 				   bala.loadGraphic(AssetPaths.pokebol__png, false, 4, 4);
+				   bala.updateHitbox();
 				   FlxG.state.add(bala);
 				   balasEnPantalla++;
 				}
 			}
-			
-			
+			//si colisionan bala y player se destruyen
+		   if (FlxG.overlap(this, Enemigo.bala))
+		   {
+			   Enemigo.bala.destroy();
+			   this.destroy();
+			   this.active = false;//para q no siga disparando
+		   }
 		}
 	}

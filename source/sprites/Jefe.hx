@@ -16,7 +16,9 @@ class Jefe extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		makeGraphic(16, 16, FlxColor.BROWN);
+		loadGraphic(AssetPaths.zubat__png, false);
+		setGraphicSize (16, 16);
+		updateHitbox();
 		
 	}
 	
@@ -34,6 +36,7 @@ class Jefe extends FlxSprite
 		   if (x >= FlxG.width - width)
 		   {
 			   this.destroy();
+			   this.active = false;
 		   }
 		   
 		   //si colisionan bala y enemigo se destruyen

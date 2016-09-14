@@ -16,7 +16,6 @@ class Enemigo extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		makeGraphic(16, 16, FlxColor.BLUE);
 		loadGraphic(AssetPaths.ratata__png, true, 16, 16);
 	}
 	
@@ -25,6 +24,7 @@ class Enemigo extends FlxSprite
 		bala = new Bullet(x + width / 2, y + height);
 		bala.velocity.y *= -1;
 		bala.loadGraphic(AssetPaths.disparoenemigo__png, false, 4, 4);
+		bala.updateHitbox();
 		FlxG.state.add(bala);
 	}
 	
