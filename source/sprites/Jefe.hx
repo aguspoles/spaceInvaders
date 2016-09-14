@@ -33,11 +33,7 @@ class Jefe extends FlxSprite
 			
 		   if (x >= FlxG.width - width)
 		   {
-			   orientacion = true;
-		   }
-		   if (x <= 0)
-		   {
-			   orientacion = false;
+			   this.destroy();
 		   }
 		   
 		   //si colisionan bala y enemigo se destruyen

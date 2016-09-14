@@ -6,6 +6,7 @@
 						import flixel.text.FlxText;
 						import flixel.ui.FlxButton;
 						import flixel.math.FlxMath;
+						import sprites.Casas;
 						import sprites.Jefe;
 						import sprites.Personaje;
 						import sprites.Enemigo;
@@ -17,6 +18,9 @@
 							private var enemyArray = new Array<Enemigo>();
 							private var enemigo:Enemigo;
 							private var jefe:Jefe;
+							private var casa1:Casas;
+							private var casa2:Casas;
+							private var casa3:Casas;
 							private var totalenemigos:Int = 21;
 							private var tiempo_1:Int = 0;
 							private var tiempo_2:Int = 0;
@@ -29,7 +33,14 @@
 							{
 								player = new Personaje(FlxG.width / 2, FlxG.height - 16);
 								add(player);
+								player.loadGraphic(AssetPaths.personaje__png, false, 16, 16);
 								jefe = new Jefe();
+								casa1 = new Casas(FlxG.width -(FlxG.width - 16), FlxG.height - 50);
+								add (casa1);
+								casa2 = new Casas(FlxG.width -(FlxG.width - 64), FlxG.height - 50);
+								add (casa2);
+								casa3 = new Casas(FlxG.width -(FlxG.width - 112), FlxG.height - 50);
+								add (casa3);
 				
 								var f:Int = 10;
 								var c:Int = 10;
@@ -57,6 +68,15 @@
 							override public function update(elapsed:Float):Void
 							{
 								super.update(elapsed);
+								
+								//colision con bala de enemigo
+								if (FlxG.overlap(Enemigo.bala, this))
+									{
+										this.destroy();
+										explosion = new FlxSprite;
+				
+										Enemigo.bala.destroy();
+									}
 					
 					//CODIGO ENEMIGOS
 								for (i in 0...enemyArray.length){
@@ -112,27 +132,18 @@
 											tiempo_3++;
 											if (tiempo_3 == 60) 
 											{
-												jefe = new Jefe();												
+												jefe = new Jefe();
+												jefe.loadGraphic(AssetPaths.zubat__png, false);
+												jefe.setGraphicSize (16, 16);
 												add(jefe);
-												jefe.active = true;
 											}
 											
-											if (!jefe.active)//si se detruye reseteamos tiempo
+											if (!jefe.exists && tiempo_3 >= 60)//si se detruye reseteamos tiempo
 											{
+												
 												tiempo_3 = 0;//¡¡¡igualmente no logro que respawnee!!!!
 											}
 										
-											
-											if (jefe.active)
-											{
-												tiempo_5++;      //dispara 1 bala por segundo
-												if (tiempo_5 == 60)
-												{
-													jefe.dispara();
-													tiempo_5 = 0;
-												}
-											}
-												
 											if (Jefe.orientacion)
 									            {
 									                jefe.x -= Jefe.velocidadX;
@@ -141,24 +152,11 @@
 									             {
 									                jefe.x += Jefe.velocidadX;
 									             }
-												 
-									
-										tiempo_4++;
-										if (tiempo_4 == 150)		//baja cada 2.5 segundos
-											{
-												jefe.y += 10;
-												tiempo_4 = 0;        //se resetea el tiempo
-											}
-											
-									//colision jefe/player
-									if (FlxG.overlap(player, jefe))
-									{
-										player.destroy();
-										jefe.destroy();
-									}
-									
 					//FIN CODIGO JEFE
-											
+											if (!player.exists)
+											{
+												
+											}
 						
 											
 							}

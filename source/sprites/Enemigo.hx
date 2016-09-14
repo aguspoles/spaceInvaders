@@ -16,14 +16,14 @@ class Enemigo extends FlxSprite
 	{
 		super(X, Y, SimpleGraphic);
 		makeGraphic(16, 16, FlxColor.BLUE);
-		//loadGraphic(AssetPaths.player__png, true, 16, 16);
-		//animation.add("lr", [3, 4, 3, 5], 6, false);
+		loadGraphic(AssetPaths.ratata__png, true, 16, 16);
 	}
 	
 	public function dispara():Void
 	{
 		bala = new Bullet(x + width / 2, y + height);
 		bala.velocity.y *= -1;
+		bala.loadGraphic(AssetPaths.disparoenemigo__png, false, 4, 4);
 		FlxG.state.add(bala);
 	}
 	

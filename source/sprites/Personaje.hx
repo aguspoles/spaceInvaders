@@ -12,6 +12,7 @@
 		private var key_left:Bool;
 		private var move:Int;
 		private var velocidadX:Int = 2;
+		private var explosion:FlxSprite;
 		
 		public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 		{
@@ -42,25 +43,12 @@
 				if (balasEnPantalla == 0)
 				{
 				   bala = new Bullet(x + width / 2, y - height);
+				   bala.loadGraphic(AssetPaths.pokebol__png, false, 4, 4);
 				   FlxG.state.add(bala);
 				   balasEnPantalla++;
 				}
 			}
 			
-			//colision con bala de enemigo
-			if (FlxG.overlap(Enemigo.bala, this))
-			{
-				this.destroy();
-				Enemigo.bala.destroy();
-			}
 			
-			//colision bala de jefe
-			if (FlxG.overlap(Jefe.bala, this))
-			{
-				this.destroy();
-				Jefe.bala.destroy();
-			}
-			
-			
-			}
 		}
+	}
