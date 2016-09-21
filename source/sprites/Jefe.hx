@@ -4,22 +4,22 @@ import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxG;
 import flixel.util.FlxColor;
+import flixel.FlxObject;
 
 
 class Jefe extends FlxSprite
 {
-
 	public static var velocidadX:Float = 1;
 	public static var orientacion:Bool;
 	public static var bala:Bullet;
+	private var tiempo:Int = 0;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		loadGraphic(AssetPaths.zubat__png, false);
-		setGraphicSize (16, 16);
+		loadGraphic(AssetPaths.zubat__png, true, 32, 32);
 		updateHitbox();
-		
+		animation.add("vuela", [0, 1], 15, true);
 	}
 	
 	public function dispara():Void
@@ -32,20 +32,13 @@ class Jefe extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{
 	    super.update(elapsed);
+		
+	    animation.play("vuela");
 			
-		   if (x >= FlxG.width - width)
+		   if (x >= FlxG.width)
 		   {
 			   this.destroy();
 			   this.active = false;
-		   }
-		   
-		   //si colisionan bala y enemigo se destruyen
-		   if (FlxG.overlap(this, Personaje.bala))
-		   {
-			   Personaje.bala.destroy();
-			   this.destroy();
-			   this.active = false;
-	    	   Personaje.balasEnPantalla = 0;
 		   }
 			  
 	}

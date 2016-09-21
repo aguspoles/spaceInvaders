@@ -3,6 +3,7 @@
 	import flixel.FlxSprite;
 	import flixel.system.FlxAssets.FlxGraphicAsset;
 	import flixel.FlxG;
+	import states.GameOver;
 
 	class Personaje extends FlxSprite
 	{
@@ -12,12 +13,11 @@
 		private var key_left:Bool;
 		private var move:Int;
 		private var velocidadX:Int = 2;
-		private var explosion:FlxSprite;
 		
 		public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 		{
-			super(X, Y, SimpleGraphic);
-			makeGraphic(16, 16, 0xFFFF0000);
+			super(X, Y);
+			loadGraphic(AssetPaths.personaje__png, false, 16, 16);
 		}
 		
 		override public function update(elapsed:Float):Void
@@ -42,19 +42,13 @@
 			{
 				if (balasEnPantalla == 0)
 				{
-				   bala = new Bullet(x + width / 2, y - height);
+				   bala = new Bullet(x + width / 2 - 8, y - height);
 				   bala.loadGraphic(AssetPaths.pokebol__png, false, 4, 4);
 				   bala.updateHitbox();
 				   FlxG.state.add(bala);
 				   balasEnPantalla++;
+				   FlxG.sound.play(AssetPaths.pokeShoot__wav, 1, false);
 				}
 			}
-			//si colisionan bala y player se destruyen
-		   if (FlxG.overlap(this, Enemigo.bala))
-		   {
-			   Enemigo.bala.destroy();
-			   this.destroy();
-			   this.active = false;//para q no siga disparando
-		   }
 		}
 	}

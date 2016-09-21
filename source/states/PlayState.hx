@@ -30,17 +30,23 @@
 							private var balaRandom:FlxRandom = new FlxRandom();
 							private var explosion:FlxSprite;
 							
+							private var _hud:HUD;
+                            private var _score:Int = 0;
+                            private var _life:Int = 3;
+							
 							override public function create():Void
 							{
+						        _hud = new HUD();
+                                add(_hud);
+ 
 								player = new Personaje(FlxG.width / 2, FlxG.height - 16);
 								add(player);
-								player.loadGraphic(AssetPaths.personaje__png, false, 16, 16);
 								jefe = new Jefe();
-								casa1 = new Casas(FlxG.width -(FlxG.width - 16), FlxG.height - 35);
+								casa1 = new Casas(FlxG.width - 36, FlxG.height - 50);
 								add (casa1);
-								casa2 = new Casas(FlxG.width -(FlxG.width - 64), FlxG.height - 35);
+								casa2 = new Casas(20, FlxG.height - 50);
 								add (casa2);
-								casa3 = new Casas(FlxG.width -(FlxG.width - 112), FlxG.height - 35);
+								casa3 = new Casas(FlxG.width/2 - 8, FlxG.height - 35);
 								add (casa3);
 				
 								var f:Int = 10;
@@ -65,32 +71,70 @@
 								super.create();
 								
 							}
+							
 
 							override public function update(elapsed:Float):Void
 							{
 								super.update(elapsed);
 								
-								//colision con bala de enemigo
-								if (FlxG.overlap(Enemigo.bala, Personaje.bala))
-									{
-										explosion= new FlxSprite(Enemigo.bala.x, Enemigo.bala.y);
-										explosion.loadGraphic(AssetPaths.explosionentredisparos__png, false);
-										explosion.setGraphicSize (16, 16);
-										Personaje.bala.destroy();
-										Enemigo.bala.destroy();
-										Personaje.balasEnPantalla = 0;
-									}
 					
 					//CODIGO ENEMIGOS
 								for (i in 0...enemyArray.length){
 
 									
+										//si colisionan bala y enemigo se destruyen
+		                               if (FlxG.overlap(enemyArray[i], Personaje.bala))
+		                               {
+			                                Personaje.bala.destroy();
+			                                enemyArray[i].destroy();
+			                                enemyArray[i].active = false;//para q no siga disparando
+	    	                                Personaje.balasEnPantalla = 0;
+			                                Enemigo.cuantosMurieron++;
+			                                FlxG.sound.play(AssetPaths.hit_enemigo__wav, 1, false);
+			   
+			                                _score += 500;
+                                            _hud.updateHUD(_life, _score);
+		                                }
+										
+										//si colisionan bala y player se destruyen
+		                                  if (FlxG.overlap(player, Enemigo.bala))
+		                                  {
+											   FlxG.sound.play(AssetPaths.destroy__wav, 1, false);
+			                                   Enemigo.bala.destroy();
+			                                   _life--;
+											   if (_life == 0)
+											   {
+												  player.destroy();
+			                                      FlxG.switchState(new GameOver());
+											   }
+											   _hud.updateHUD(_life,_score);
+		                                  }
+										
 									//colision enemigo/player
 									if (FlxG.overlap(enemyArray[i], player))
 									{
 										player.destroy();
 										enemyArray[i].destroy();
+										FlxG.switchState(new GameOver());
 									}
+									
+									//colision enemigos/casas
+									if (FlxG.overlap(enemyArray[i], casa1))
+									    casa1.destroy();
+									if (FlxG.overlap(enemyArray[i], casa2))
+									    casa2.destroy();
+									if (FlxG.overlap(enemyArray[i], casa3))
+									    casa3.destroy();
+									
+								    //colision entre balas
+		                            if (FlxG.overlap(Enemigo.bala, Personaje.bala) && Personaje.bala != null && Enemigo.bala != null)
+		                            {
+			                            /*explosion = new FlxSprite(Enemigo.bala.x / 2, Enemigo.bala.y / 2);
+			                            explosion.loadGraphic(AssetPaths.explosionentredisparos__png, false, 16, 16);*/
+		                                Personaje.bala.destroy();
+			                            Enemigo.bala.destroy();
+			                            Personaje.balasEnPantalla = 0;
+		                            }
 									
 										
 									
@@ -122,11 +166,11 @@
 											if (tiempo_2 == 60) //cada un intervalo de tiempo
 											{
 												var r:Int = balaRandom.int(0, enemyArray.length - 1);
-												while (!enemyArray[r].active && Enemigo.cuntosQuedan <= totalenemigos)  //este ciclo me permite mantener los intervalos de tiempo, cunado vayan despareciendo los enemigos
+												while (!enemyArray[r].active && Enemigo.cuantosMurieron < totalenemigos)  //este ciclo me permite mantener los intervalos de tiempo, cunado vayan despareciendo los enemigos
 												{
 													r = balaRandom.int(0, enemyArray.length - 1);
 												}
-												if(enemyArray[r].active)//para que no siga disparando el ultimo vivo una vez que muere
+												if(enemyArray[r].active)//condicion para que no siga disparando el ultimo vivo una vez que muere
 											        enemyArray[r].dispara();
 												tiempo_2 = 0;
 											}
@@ -141,10 +185,21 @@
 												add(jefe);
 											}
 											
+											 //si colisionan bala.player y jefe se destruyen
+		                                    if (FlxG.overlap(jefe, Personaje.bala))
+		                                    {
+			                                    Personaje.bala.destroy();
+			                                    jefe.destroy();
+			                                    jefe.active = false;
+	    	                                    Personaje.balasEnPantalla = 0;
+			                                    _score += 1000;
+												_hud.updateHUD(_life, _score);
+		                                    }
+											
 											if (!jefe.active && tiempo_3 >= 60)//si se detruye reseteamos tiempo
 											{
 												
-												tiempo_3 = 0;//¡¡¡igualmente no logro que respawnee!!!!
+												tiempo_3 = 0;
 											}
 										
 											if (Jefe.orientacion)
@@ -157,8 +212,12 @@
 									             }
 					//FIN CODIGO JEFE
 						
-											
-									//HOLA AMIGOS DE YOUTUBE
+					          //reseteamos nivel
+					            if (Enemigo.cuantosMurieron == totalenemigos)
+								{
+								    FlxG.switchState(new Playstate());
+									Enemigo.cuantosMurieron = 0;
+								}
 
 							
 						}
